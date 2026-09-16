@@ -3,6 +3,13 @@ name: Publish Ronic Fitness website
 on:
   push:
     branches: [main]
+    paths:
+      - 'index.html'
+      - 'privacy.html'
+      - 'robots.txt'
+      - 'assets/**'
+      - 'css/**'
+      - 'js/**'
   workflow_dispatch:
 
 permissions:
@@ -16,7 +23,6 @@ concurrency:
 
 jobs:
   publish:
-    if: ${{ hashFiles('index.html') != '' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -28,6 +34,7 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Prepare public site files
         run: |
+          test -f index.html
           mkdir -p _site
           cp index.html privacy.html robots.txt _site/
           cp -R assets css js _site/
